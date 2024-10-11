@@ -118,11 +118,11 @@ func Extract(ctx context.Context, rootDir string, f archiver.File) (retErr error
 	return nil
 }
 
-type voiceInfo struct {
-	ONXX      string
-	ModelCard string
-	JSON      string
-}
+// type voiceInfo struct {
+// 	ONXX      string
+// 	ModelCard string
+// 	JSON      string
+// }
 
 func hashFile(hs hash.Hash, fn string) error {
 	f, err := os.Open(fn)
@@ -410,21 +410,42 @@ func main() {
 	voiceVersion := "1.0.0"
 	voiceURLPfx := "https://huggingface.co/rhasspy/piper-voices/resolve/v" + voiceVersion
 	voices := map[string][]string{
-		"jenny": {
-			voiceURLPfx + "/en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx",
-			voiceURLPfx + "/en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx.json",
-			voiceURLPfx + "/en/en_GB/jenny_dioco/medium/MODEL_CARD",
+		// "irina": {
+		// 	voiceURLPfx + "/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx",
+		// 	voiceURLPfx + "/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json",
+		// 	voiceURLPfx + "/ru/ru_RU/irina/medium/MODEL_CARD",
+		// },
+		"ruslan": {
+			voiceURLPfx + "/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx",
+			voiceURLPfx + "/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx.json",
+			voiceURLPfx + "/ru/ru_RU/ruslan/medium/MODEL_CARD",
 		},
-		"alan": {
-			voiceURLPfx + "/en/en_GB/alan/medium/en_GB-alan-medium.onnx",
-			voiceURLPfx + "/en/en_GB/alan/medium/MODEL_CARD",
-			voiceURLPfx + "/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json",
+
+		// "denis": {
+		// 	voiceURLPfx + "/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx",
+		// 	voiceURLPfx + "/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx.json",
+		// 	voiceURLPfx + "/ru/ru_RU/denis/medium/MODEL_CARD",
+		// },
+		"dmitri": {
+			voiceURLPfx + "/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx",
+			voiceURLPfx + "/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx.json",
+			voiceURLPfx + "/ru/ru_RU/dmitri/medium/MODEL_CARD",
 		},
-		"vi": {
-			voiceURLPfx + "/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx",
-			voiceURLPfx + "/vi/vi_VN/vivos/x_low/MODEL_CARD",
-			voiceURLPfx + "/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx.json",
-		},
+		// "jenny": {
+		// 	voiceURLPfx + "/en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx",
+		// 	voiceURLPfx + "/en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx.json",
+		// 	voiceURLPfx + "/en/en_GB/jenny_dioco/medium/MODEL_CARD",
+		// },
+		// "alan": {
+		// 	voiceURLPfx + "/en/en_GB/alan/medium/en_GB-alan-medium.onnx",
+		// 	voiceURLPfx + "/en/en_GB/alan/medium/MODEL_CARD",
+		// 	voiceURLPfx + "/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json",
+		// },
+		// "vi": {
+		// 	voiceURLPfx + "/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx",
+		// 	voiceURLPfx + "/vi/vi_VN/vivos/x_low/MODEL_CARD",
+		// 	voiceURLPfx + "/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx.json",
+		// },
 	}
 	for name, urls := range voices {
 		if err := installVoice(*dir, name, voiceVersion, urls); err != nil {
@@ -434,8 +455,9 @@ func main() {
 
 	piperVersion := "2023.11.14-2"
 	archives := map[string]string{
-		"linux":   "https://github.com/rhasspy/piper/releases/download/" + piperVersion + "/piper_linux_x86_64.tar.gz",
-		"windows": "https://github.com/rhasspy/piper/releases/download/" + piperVersion + "/piper_windows_amd64.zip",
+		// "linux_x86_64": "https://github.com/rhasspy/piper/releases/download/" + piperVersion + "/piper_linux_x86_64.tar.gz",
+		"linux_armv64": "https://github.com/rhasspy/piper/releases/download/" + piperVersion + "/piper_linux_aarch64.tar.gz",
+		// "windows": "https://github.com/rhasspy/piper/releases/download/" + piperVersion + "/piper_windows_amd64.zip",
 	}
 	for plaform, url := range archives {
 		if err := installPiper(*dir, plaform, piperVersion, url); err != nil {
