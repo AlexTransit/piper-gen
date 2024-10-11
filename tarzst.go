@@ -2,11 +2,13 @@ package main
 
 import (
 	"archive/tar"
+	"errors"
 	"fmt"
-	"github.com/klauspost/compress/zstd"
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/klauspost/compress/zstd"
 )
 
 type TarZstWriter struct {
@@ -57,21 +59,20 @@ func (tzw *TarZstWriter) AppendFile(dstPth, srcFn string) error {
 	return nil
 }
 
-func (tzw *TarZstWriter) Close() error {
-	var err error
+func (tzw *TarZstWriter) Close() (err error) {
 	te := tzw.tarWr.Close()
 	ze := tzw.zstWr.Close()
 	fe := tzw.file.Close()
-	if err == nil && te != nil {
-		err = fmt.Errorf("TarZstWriter.Close: tar: %w", te)
+	if te != nil {
+		err = errors.Join(fmt.Errorf("TarZstWriter.Close: tar: %w", te))
 	}
-	if err == nil && ze != nil {
-		err = fmt.Errorf("TarZstWriter.Close: zst: %w", ze)
+	if ze != nil {
+		err = errors.Join(fmt.Errorf("TarZstWriter.Close: zst: %w", ze))
 	}
-	if err == nil && fe != nil {
-		err = fmt.Errorf("TarZstWriter.Close: file: %w", fe)
+	if fe != nil {
+		err = errors.Join(fmt.Errorf("TarZstWriter.Close: file: %w", fe))
 	}
-	return nil
+	return err
 }
 
 func createTarZst(fn string, opts ...zstd.EOption) (*TarZstWriter, error) {
